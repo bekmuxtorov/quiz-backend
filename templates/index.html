@@ -1,0 +1,22 @@
+<style>
+    ul{
+        display: flex;
+        
+    }
+    li{
+        border: 2px solid ;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+    }
+</style>
+
+<ul>
+    {% for exam in exams %}
+      <li>
+        {{ exam }}</br>
+        <p>Savollar soni: {{ exam. }}</p>
+        <a href="{% url 'exams_items' pk=exam.id %}">Testni boshlash</a>
+      </li>
+    {% endfor %}
+</ul>
