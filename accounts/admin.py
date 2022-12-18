@@ -4,11 +4,11 @@ from . import models
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username']
+    list_display = ['id', 'username', 'first_name', 'last_name']
 
 
 class ResultsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'exam', 'result']
+    list_display = ['id', 'user', 'exam', 'correct', 'wrong', 'time_out']
 
 
 admin.site.register(models.User, UserAdmin)

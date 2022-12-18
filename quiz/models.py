@@ -19,6 +19,21 @@ class Exams(models.Model):
         verbose_name=('Fan nomi')
     )
 
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Yaratilgan vaqt'
+    )
+
+    time_limit = models.IntegerField(
+        verbose_name='Har bir test uchun ajratilgan vaqt(minut)',
+        default=1
+    )
+
+    questions_count = models.IntegerField(
+        default=20,
+        verbose_name='O\'quvchiga chiquvchi testlar soni(ta)'
+    )
+
     def __str__(self):
         return f"{self.name} || {self.science_name}"
 
@@ -59,6 +74,10 @@ class Quiz(models.Model):
         choices=ANSWERS,
         default='answer_c',
         verbose_name=('Javob')
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
     )
 
     def __str__(self):

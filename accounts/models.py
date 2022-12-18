@@ -5,19 +5,32 @@ from quiz.models import Exams
 
 
 class User(AbstractUser):
-    name = models.CharField(
+    first_name = models.CharField(
         max_length=50,
         verbose_name='Ism'
     )
 
-    is_admin = models.BooleanField(
-        'Is admin',
-        default=False
+    last_name = models.CharField(
+        max_length=50,
+        verbose_name='Familiya'
     )
 
-    is_student = models.BooleanField(
-        'Is student',
-        default=True
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Kiritilgan vaqt'
+    )
+
+    image = models.ImageField(
+        verbose_name='Foydalanuvchi rasmi',
+        null=True,
+        blank=True
+    )
+
+    bio = models.CharField(
+        max_length=150,
+        verbose_name='Bio',
+        null=True,
+        blank=True
     )
 
 
@@ -34,12 +47,17 @@ class Results(models.Model):
         verbose_name='Imtihon nomi'
     )
 
-    result = models.DecimalField(
-        decimal_places=2,
-        verbose_name='Natija',
-        max_digits=10
+    correct = models.IntegerField(
+        verbose_name='To\'g\'i javob'
     )
 
+    wrong = models.IntegerField(
+        verbose_name='No\to\'g\'i javob'
+    )
+
+    time_out = models.IntegerField(
+        verbose_name='Vaqt'
+    )
 
     def __str__(self):
         return f"{self.user} || {self.exam}"

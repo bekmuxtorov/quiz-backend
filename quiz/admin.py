@@ -3,7 +3,7 @@ from . import models
 
 
 class ExamsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'science_name']
+    list_display = ['id', 'name', 'science_name', 'time_limit', 'questions_count']
 
 
 class QuizAdmin(admin.ModelAdmin):
