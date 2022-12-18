@@ -38,6 +38,7 @@ class Results(models.Model):
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
+        default=0,
         verbose_name='Foydalanuvchi'
     )
 
@@ -48,16 +49,29 @@ class Results(models.Model):
     )
 
     correct = models.IntegerField(
-        verbose_name='To\'g\'i javob'
+        verbose_name='To\'g\'i javob',
+        default=0
     )
 
     wrong = models.IntegerField(
-        verbose_name='No\to\'g\'i javob'
+        verbose_name='Noto\'g\'i javob',
+        default=0
     )
 
-    time_out = models.IntegerField(
-        verbose_name='Vaqt'
+    time_out = models.CharField(
+        max_length=120,
+        verbose_name='Vaqt',
+        blank=True,
+        null=True
     )
 
     def __str__(self):
         return f"{self.user} || {self.exam}"
+
+    def get_result(self, user, exam, correct, wrong, time_out):
+        self.user = user
+        self.exam = exam
+        self.correct = correct
+        self.wrong = wrong
+        self.time_out = time_out
+        self.save()

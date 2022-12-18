@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from . import forms
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -34,7 +35,7 @@ def LoginView(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('students')
+                return redirect('home')
             else:
                 msg = 'Login yoki parol xato, qayta urinib ko\'ring'
         else:
@@ -47,8 +48,14 @@ def LoginView(request):
     return render(request, 'login.html', context)
 
 
+@login_required
+def LogoutView(request):
+    logout(request)
+    return redirect("home")
+
+
 def HomeView(request):
-    return render(request, 'index.html')
+    return render(request, 'home.html')
 
 
 def AdminView(request):

@@ -1,0 +1,40 @@
+<style>
+  ul{
+    display: flex;
+    
+  }
+  li{
+    border: 2px solid ;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .nav{
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+<div class="nav">
+  <h4>QuizSite</h4>
+  <h4>
+    
+    {% if user.is_authenticated %}
+    <p>{{ user }}</p>
+    <a href="{% url 'logout' %}">Log out</a>
+    {% else %}
+    <a href="{% url 'login' %}">Kirish</a>
+    <a href="{% url 'register' %}">Ro'yhatdan o'tish</a>
+    {% endif %}
+  </h4>
+</div>
+
+<ul>
+  {% for exam in exams %}
+  <li>
+    {{ exam }}</br>
+    <p>Savollar soni: {{ exam. }}</p>
+    <a href="{% url 'exams_items' pk=exam.id %}">Testni boshlash</a>
+  </li>
+  {% endfor %}
+</ul>

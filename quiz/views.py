@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from accounts.models import Results
 from . import models
 
 # Create your views here.
@@ -7,7 +8,7 @@ from . import models
 def ExamsView(request):
     exams = models.Exams.objects.all()
     context = {'exams': exams}
-    return render(request, 'index.html', context)
+    return render(request, 'home.html', context)
 
 
 def ExamsDetailView(request, pk):
@@ -17,18 +18,29 @@ def ExamsDetailView(request, pk):
     if request.method == "POST":
         questions = models.Quiz.objects.filter(exam=pk).all()
         wrong, correct, total = 0, 0, 0
+        user = request.user
+        time_out = request.POST.get('timer')
         for question in questions:
             total += 1
             print(f'Question: {question.question}')
             print(f'User answer: {request.POST.get(question.question)}')
             print(f'Answer: {question.answer}')
-            print(request.POST.get('timer'))
+            print(time_out)
             print('--'*20)
-            
+
             if question.answer == request.POST.get(question.question):
                 correct += 1
             else:
                 wrong += 1
+        # user = request.POST.get('')
+
+        Results.objects.create(
+            user=user,
+            exam=choose_exam,
+            correct=correct,
+            wrong=wrong,
+            time_out=time_out
+        )
         context = {
             "total": total,
             "correct": correct,
