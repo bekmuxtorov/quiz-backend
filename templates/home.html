@@ -51,11 +51,11 @@
         <p><b>Umumiy vaqt:</b> {{ exam.get_all_time }} sekund</p>
         <p><b>Savollar soni:</b> {{ exam.questions_count }} ta</p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Testni boshlash
+          Testni boshlash MODAL
         </button>
-      </li>
-      
-      <!-- Modal -->
+        <a href="{% url 'exams_items' pk=exam.id %}" type="submit" class="btn btn-primary" >Testni boshlash </a>
+        {{exam.id}}
+              <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -66,6 +66,7 @@
             
             <div class="modal-body">
               Testni boshlash tugmasini bosishingiz bilan vaqt boshlanadi.
+              {{exam.id}}
               
             </div>
             <div class="modal-footer">
@@ -75,6 +76,10 @@
           </div>
         </div>
       </div>
+      </li>
+      
+      
+
       {% endfor %}
     </ul>
     

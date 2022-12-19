@@ -117,3 +117,13 @@ class Results(models.Model):
         self.wrong = wrong
         self.time_out = time_out
         self.save()
+
+    def set_result(self):
+        return {
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'exam_name': self.exam,
+            'correct': self.correct,
+            'wrong': self.wrong,
+            'time_out': self.time_out
+        }

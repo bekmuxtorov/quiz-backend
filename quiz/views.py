@@ -59,7 +59,8 @@ def ExamsDetailView(request, pk):
             "total": total,
             "correct": correct,
             'wrong': wrong,
-            'time': request.POST.get('time')
+            'time': time_out,
+            'choose_exam': choose_exam
         }
         return render(request, 'results.html', context)
 
@@ -68,3 +69,27 @@ def ExamsDetailView(request, pk):
                    'choose_exam_quizes': choose_exam_quizes,
                    }
         return render(request, 'exams_items.html', context)
+
+
+def ResultsListView(request, pk):
+    choose_exam = models.Exams.objects.get(pk=pk)
+    results_user = Results.objects.filter(exam=choose_exam).first()
+    results_user_items = [
+        results_user.user.first_name,
+        results_user.user.last_name,
+        results_user.correct,
+        results_user.wrong,
+        results_user.time_out,
+    ]
+
+    results_temrary_users = Temporary_user.objects.filter(
+        exam_name=choose_exam
+    )
+
+    context = {
+        'results': results_user,
+        'choose_exam': choose_exam,
+        'results_user_items':results_user_items,
+        'results_temrary_users': results_temrary_users
+    }
+    return render(request, 'results_list.html', context)
