@@ -37,6 +37,9 @@ class Exams(models.Model):
     def __str__(self):
         return f"{self.name} || {self.science_name}"
 
+    def get_all_time(self):
+        return self.time_limit * self.questions_count
+
 
 class Quiz(models.Model):
     exam = models.ForeignKey(

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from accounts.models import Results
+from accounts.models import Results, Temporary_user
 from . import models
 
 # Create your views here.
@@ -20,6 +20,9 @@ def ExamsDetailView(request, pk):
         wrong, correct, total = 0, 0, 0
         user = request.user
         time_out = request.POST.get('timer')
+        # TEMPRARY USER
+        temprary_first_name = request.POST.get('temprary_first_name')
+        temprary_last_name = request.POST.get('temprary_last_name')
         for question in questions:
             total += 1
             print(f'Question: {question.question}')
@@ -34,13 +37,24 @@ def ExamsDetailView(request, pk):
                 wrong += 1
         # user = request.POST.get('')
 
-        Results.objects.create(
-            user=user,
-            exam=choose_exam,
-            correct=correct,
-            wrong=wrong,
-            time_out=time_out
-        )
+        try:
+            Results.objects.create(
+                user=user,
+                exam=choose_exam,
+                correct=correct,
+                wrong=wrong,
+                time_out=time_out
+            )
+        except:
+            Temporary_user.objects.create(
+                first_name=temprary_first_name,
+                last_name=temprary_last_name,
+                exam_name=choose_exam,
+                correct=correct,
+                wrong=wrong,
+                time_out=time_out
+            )
+
         context = {
             "total": total,
             "correct": correct,

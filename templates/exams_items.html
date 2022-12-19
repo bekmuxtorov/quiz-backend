@@ -2,6 +2,14 @@
 <h2>User {{ user.first_name }}</h2>
 <div id="displaytimer"><b>Timer: 0 seconds</b></div>
 <form action="" method="post">{% csrf_token %}
+    {% if not user.is_authenticated %}
+    <h2>Siz ro'yhatdan o'tmagansiz, iltimos ism va familiyangizni kiriting</h2>
+    <input type="text" name="temprary_first_name" placeholder="Ismingizni kiriting:" required><br>
+    <input type="text" name="temprary_last_name" placeholder="Familiyangizni kiriting:" required>
+    {% endif %}
+    
+    
+    
     <input type="hidden" name="user" value="{{ user }}">
     <input type="hidden" name="exam" value="{{ choose_exam }}">
     <ul>
@@ -10,13 +18,13 @@
             {{ choose_exam_quiz.question }}</br>
             <input type="radio" id="answer_a" name="{{choose_exam_quiz.question}}" value="answer_a">
             <label for="answer_a">{{ choose_exam_quiz.answer_a }}</label><br>
-
+            
             <input type="radio" id="answer_b" name="{{choose_exam_quiz.question}}" value="answer_b">
             <label for="answer_b">{{ choose_exam_quiz.answer_b }}</label><br>
-
+            
             <input type="radio" id="answer_c" name="{{choose_exam_quiz.question}}" value="answer_c">
             <label for="answer_c">{{ choose_exam_quiz.answer_c }}</label><br>
-
+            
             <input type="radio" id="answer_d" name="{{choose_exam_quiz.question}}" value="answer_c">
             <label for="answer_d">{{ choose_exam_quiz.answer_d }}</label><br>
             <input id='timer' type='hidden' name="timer" value="">
@@ -28,12 +36,12 @@
 </form>
 
 <script>
-
+    
     console.log('hello world')
     const timer = document.getElementById('displaytimer')
     console.log(timer.textContent)
     const inputtag = document.getElementById('timer')
-
+    
     t = 0
     setInterval(() => {
         t += 1
