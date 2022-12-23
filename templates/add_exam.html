@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savol qo'shish </title>
+    <style>
+        .box {
+            border: 2px solid;
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Imtihon qo'shish oynasi</h1>
+    <div class="box">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="exam_name" id="exam_name">Imtihonni nomi:</label>
+            <input type="text" name="exam_name" placeholder="Imtihon nomi:" required><br>
+
+            <label for="science_name" id="science_name">Fanni nomi:</label>
+            <input type="text" name="science_name" placeholder="Imtihon nomi:" required><br>
+
+            <label for="time_limit" id="time_limit">Har bir test uchun ajratilgan vaqt(minut):</label>
+            <input type="number" name="time_limit" placeholder="Imtihon nomi:" required><br>
+
+            <label for="questions_count" id="questions_count">O\'quvchiga chiquvchi testlar soni(ta):</label>
+            <input type="number" name="questions_count" placeholder="Imtihon nomi:" required><br>
+            <input type="submit" value="Jo'natish">{{text}}
+        </form>
+    </div>
+</body>
+
+</html>

@@ -13,7 +13,8 @@
 <body>
     <div class="container">
         <h2>{{ choose_exam }}</h2>
-        <h2>{{ results_user_items }}</h2>
+
+        <a href="{% url 'home' %}">Barcha testlar</a>
         <table class="table">
             <thead>
                 <tr>
@@ -39,7 +40,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <hr><hr>
 
     </div>
 

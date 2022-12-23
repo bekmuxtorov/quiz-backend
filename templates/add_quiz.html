@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savol qo'shish oynasi</title>
+</head>
+
+<body>
+    <h1>{{ exam.name }} imtihoniga savollar qo'shish oynasi</h1>
+    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <input type="hidden" name="add_only" value="add_only">
+        <label for="question">Savol:</label>
+        <input type="text" name="question" id="question" required><br>
+
+        <label for="answer_a">A javob</label>
+        <input type="text" name="answer_a" id="answer_a" required><br>
+
+        <label for="answer_b">B javob</label>
+        <input type="text" name="answer_b" id="answer_b" required><br>
+
+        <label for="answer_c">C javob</label>
+        <input type="text" name="answer_c" id="answer_c" required><br>
+
+        <label for="answer_d">D javob</label>
+        <input type="text" name="answer_d" id="answer_d" required><br>
+
+        <label for="answer">Javob</label>
+        <select name="answer_id" id="answer">
+            {% for key, value in answers.items %}
+            <option value="{{key}}">{{value}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Saqlash">
+        {{text}}
+    </form>
+    <hr>
+    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <input type="hidden" name="add_excel" value="add_excel">
+        <label for="file">Exceldan import qilish</label>
+        <input type="file" name="excel_file" value="Fayl saqlash" id="file">
+
+        <input type="submit" value="Saqlash">
+
+    </form>
+
+</body>
+
+</html>

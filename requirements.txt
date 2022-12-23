@@ -3,3 +3,7 @@ aiogram==2.21
 djangorestframework==3.13.1
 environs==8.0.0
 Pillow==9.3.0
+python-docx==0.8.11
+whitenoise==6.2.0
+openpyxl==3.0.10
+somewhere==0.0.1

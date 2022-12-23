@@ -1,8 +1,10 @@
+{% load static %}
 <div class="card-body">
     <p class="card-text">Time Taken: {{time}} seconds</p>
     <p class="card-text">Tog'ri javoblar: {{correct}}</p>
     <p class="card-text">Xato javoblar: {{wrong}}</p>
     <p class="card-text">Jami savollar: {{total}}</p>
-    <h5>All the best for next quiz!</h5>
-    <a href="{% url 'results_list' pk=choose_exam.id %}">Natijalarni</a>
+    <a href="{% url 'download' path=path_to %}" download>Download file</a>
+
+    <a href=" {% url 'results_list' pk=choose_exam.id %}">Natijalarni</a>
 </div>

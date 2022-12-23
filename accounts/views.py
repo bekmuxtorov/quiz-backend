@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from . import forms
 from django.contrib.auth import authenticate, login, logout
+from quiz.models import Exams
 
 # Create your views here.
 
@@ -58,8 +59,12 @@ def HomeView(request):
     return render(request, 'home.html')
 
 
-def AdminView(request):
-    return render(request, 'admin.html')
+def ProfileView(request):
+    exams = Exams.objects.all()
+    context = {
+        'exams': exams
+    }
+    return render(request, 'profile.html', context)
 
 
 def StudentView(request):

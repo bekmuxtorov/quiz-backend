@@ -33,6 +33,9 @@ class User(AbstractUser):
         blank=True
     )
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Temporary_user(models.Model):
     first_name = models.CharField(
@@ -109,21 +112,3 @@ class Results(models.Model):
 
     def __str__(self):
         return f"{self.user} || {self.exam}"
-
-    def get_result(self, user, exam, correct, wrong, time_out):
-        self.user = user
-        self.exam = exam
-        self.correct = correct
-        self.wrong = wrong
-        self.time_out = time_out
-        self.save()
-
-    def set_result(self):
-        return {
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-            'exam_name': self.exam,
-            'correct': self.correct,
-            'wrong': self.wrong,
-            'time_out': self.time_out
-        }

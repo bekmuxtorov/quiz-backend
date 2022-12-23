@@ -9,6 +9,11 @@ ANSWERS = (
 
 
 class Exams(models.Model):
+    author = models.CharField(
+        max_length=120,
+        verbose_name="Muallif"
+    )
+
     name = models.CharField(
         max_length=50,
         verbose_name=('Imtihon nomi')
@@ -88,3 +93,29 @@ class Quiz(models.Model):
 
     def get_question(self):
         return (self.question)[:100]
+
+
+def user_directory_path(exam, filename):
+    exam = f"{exam}".replace(' ', '_').replace('||', '')
+    return 'excelfiles/{0}/{1}'.format(exam, filename)
+
+
+class QuizExcel(models.Model):
+    exam = models.ForeignKey(
+        to=Exams,
+        verbose_name='Imtihon nomi',
+        on_delete=models.CASCADE
+    )
+
+    file = models.FileField(
+        upload_to=user_directory_path,
+        verbose_name='Fayl'
+    )
+
+    create_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Qo\'shilgan vaqt:'
+    )
+
+    def __str__(self):
+        return f"file {self.exam}"
