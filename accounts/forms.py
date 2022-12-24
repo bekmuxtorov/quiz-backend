@@ -25,7 +25,8 @@ class SignUpForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': "form-control"
+                'class': "form-control",
+                'id': 'floatingInput'
             }
         )
     )
@@ -33,7 +34,8 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'id': 'firstName'
             }
         )
     )
@@ -41,7 +43,8 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'id': 'lastName'
             }
         )
     )
@@ -49,7 +52,8 @@ class SignUpForm(UserCreationForm):
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control'
+                'class': 'form-control ',
+                'id': 'password1'
             }
         )
     )
@@ -57,7 +61,8 @@ class SignUpForm(UserCreationForm):
     password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'id': 'password2'
             }
         )
     )

@@ -1,51 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savol qo'shish oynasi</title>
-</head>
+{% block title %}Test qo'shish || QuizTest {% endblock title %}
+{% block content %}
 
-<body>
-    <h1>{{ exam.name }} imtihoniga savollar qo'shish oynasi</h1>
-    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-        <input type="hidden" name="add_only" value="add_only">
-        <label for="question">Savol:</label>
-        <input type="text" name="question" id="question" required><br>
 
-        <label for="answer_a">A javob</label>
-        <input type="text" name="answer_a" id="answer_a" required><br>
+<!-- <h1>{{ exam.name }} imtihoniga savollar qo'shish oynasi</h1>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <input type="hidden" name="add_only" value="add_only">
+    <label for="question">Savol:</label>
+    <input type="text" name="question" id="question" required><br>
 
-        <label for="answer_b">B javob</label>
-        <input type="text" name="answer_b" id="answer_b" required><br>
+    <label for="answer_a">A javob</label>
+    <input type="text" name="answer_a" id="answer_a" required><br>
 
-        <label for="answer_c">C javob</label>
-        <input type="text" name="answer_c" id="answer_c" required><br>
+    <label for="answer_b">B javob</label>
+    <input type="text" name="answer_b" id="answer_b" required><br>
 
-        <label for="answer_d">D javob</label>
-        <input type="text" name="answer_d" id="answer_d" required><br>
+    <label for="answer_c">C javob</label>
+    <input type="text" name="answer_c" id="answer_c" required><br>
 
-        <label for="answer">Javob</label>
-        <select name="answer_id" id="answer">
-            {% for key, value in answers.items %}
-            <option value="{{key}}">{{value}}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Saqlash">
-        {{text}}
-    </form>
-    <hr>
-    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-        <input type="hidden" name="add_excel" value="add_excel">
-        <label for="file">Exceldan import qilish</label>
-        <input type="file" name="excel_file" value="Fayl saqlash" id="file">
+    <label for="answer_d">D javob</label>
+    <input type="text" name="answer_d" id="answer_d" required><br>
 
-        <input type="submit" value="Saqlash">
+    <label for="answer">Javob</label>
+    <select name="answer_id" id="answer">
+        {% for key, value in answers.items %}
+        <option value="{{key}}">{{value}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Saqlash">
+    {{text}}
+</form>
+<hr>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <input type="hidden" name="add_excel" value="add_excel">
+    <label for="file">Exceldan import qilish</label>
+    <input type="file" name="excel_file" value="Fayl saqlash" id="file">
 
-    </form>
+    <input type="submit" value="Saqlash">
 
-</body>
+</form> -->
 
-</html>
+
+<div class="container mt-5 ">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    Yangi test yozish
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                    <div class="card border-0">
+                        <!-- form -->
+                        <div class="card-body">
+                            <form action="" method="post">{% csrf_token %}
+                                {% if text is not None %}
+                                <p class="alert alert-success text-center">{{text}}</p>
+                                {% endif %}
+
+                                <input type="hidden" name="add_only" value="add_only">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" name="question" placeholder="Savol..." id="question"
+                                        style="height: 100px"></textarea>
+                                    <label for="question">Savol</label>
+                                </div>
+                                <!-- answers -->
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addonA">A javob</span>
+                                            <input type="text" class="form-control" name="answer_a"
+                                                placeholder="A javob..." aria-describedby="basic-addonA">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addonB">B javob</span>
+                                            <input type="text" class="form-control" name="answer_b"
+                                                placeholder="B javob..." aria-describedby="basic-addonB">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addonB">C javob</span>
+                                            <input type="text" class="form-control" name="answer_c"
+                                                placeholder="C javob..." aria-describedby="basic-addonC">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addonD">D
+                                                javob</span>
+                                            <input type="text" name="answer_d" class="form-control"
+                                                placeholder="D javob..." aria-describedby="basic-addonD">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /answers -->
+
+
+
+                                <!-- correct answer (select) -->
+                                <label class="mb-2">To'g'ri javob</label>
+                                <select name="answer_id" class="form-select mb-3" aria-label="Default select example">
+                                    {% for key, value in answers.items %}
+                                    <option value="{{key}}">{{value}}</option>
+                                    {% endfor %}
+                                </select>
+                                <!-- correct answer (select) -->
+
+                                <!-- form submit -->
+                                <div class="form-floating mb-3">
+                                    <button type="submit" class="w-25 btn btn-outline-primary float-end">
+                                        Tayyor
+                                    </button>
+                                </div>
+                                <!-- form submit -->
+
+                                <!-- /form inputs -->
+                            </form>
+                        </div>
+                        <!-- form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Excel fayldan import qilish
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                    <div class="card mx-auto border-0">
+                        <!-- form -->
+                        <div class="card-body">
+                            <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                                <input type="hidden" name="add_excel" value="add_excel">
+                                <!-- form inputs -->
+                                <label class="mb-2">Namunani yuklab olish</label>
+                                <a class="mb-2" href="{% static 'files/Namuna.xlsx' %}">Namuna.xlsx</a>
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="upload_excel">Yuklang</label>
+                                    <input type="file" name="excel_file" class="form-control" id="upload_excel">
+                                </div>
+                                <!-- /form inputs -->
+
+
+                                <!-- form Submit button -->
+                                <div class="form-floating mb-3">
+                                    <button type="submit" class="w-25 btn btn-success float-end">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Import
+                                    </button>
+                                </div>
+                                <!-- /form Submit button -->
+                            </form>
+                        </div>
+                        <!-- /form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

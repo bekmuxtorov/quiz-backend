@@ -1,6 +1,42 @@
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Saqlash">
-    {{msg}}
-</form>
+{% include "base.html" %}
+
+{% block title %}Kirish || QuizTest {% endblock title %}
+{% block content %}
+<!-- login section -->
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-5 mx-auto">
+            <div class="card mx-auto shadow rounded-5">
+                <div class="card-header mb-0">
+                    <h4 class="card-title text-center m-4">QuizeApp platformasi</h4>
+                    <hr class="mb-2 mt-0" size="3">
+                    <h6 class="card-subtitle text-muted">Saytga kirish</h6>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">{% csrf_token %}
+                        {% if msg is not None %}
+
+                        <p class="alert alert-danger text-center">{{msg}}</p>
+                        {% endif %}
+
+                        {{ form.as_p }}
+                        <div class="form-floating mb-3">
+
+                            <button type="submit" class="btn btn-outline-primary w-25 float-end">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </button>
+                        </div>
+
+                        <div class="d-flex align-item-center">
+                            <p class="m-0 mb-2 text-muted mx-1">Ro'yxatgan o'tmaganmisiz ?</p>
+                            <a style="text-decoration: none;" href="{% url 'register' %}">Ro'yxatdan o'tish</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- login section -->
+
+{% endblock content %}

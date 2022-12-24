@@ -1,60 +1,153 @@
-<h1>Exams detail <br> {{ choose_exam }} </h1>
-<h2>User {{ user.first_name }}</h2>
-<div id="displaytimer"><b>Timer: 0 seconds</b></div>
-<form action="" method="post">{% csrf_token %}
-    {% if not user.is_authenticated %}
-    <h2>Siz ro'yhatdan o'tmagansiz, iltimos ism va familiyangizni kiriting</h2>
-    <input type="text" name="temprary_first_name" placeholder="Ismingizni kiriting:" required><br>
-    <input type="text" name="temprary_last_name" placeholder="Familiyangizni kiriting:" required>
-    {% endif %}
-    
-    
-    
-    <input type="hidden" name="user" value="{{ user }}">
-    <input type="hidden" name="exam" value="{{ choose_exam }}">
-    <ul>
-        {% for choose_exam_quiz in choose_exam_quizes %}
-        <li>
-            {{ choose_exam_quiz.question }}</br>
-            <input type="radio" id="answer_a" name="{{choose_exam_quiz.question}}" value="answer_a">
-            <label for="answer_a">{{ choose_exam_quiz.answer_a }}</label><br>
-            
-            <input type="radio" id="answer_b" name="{{choose_exam_quiz.question}}" value="answer_b">
-            <label for="answer_b">{{ choose_exam_quiz.answer_b }}</label><br>
-            
-            <input type="radio" id="answer_c" name="{{choose_exam_quiz.question}}" value="answer_c">
-            <label for="answer_c">{{ choose_exam_quiz.answer_c }}</label><br>
-            
-            <input type="radio" id="answer_d" name="{{choose_exam_quiz.question}}" value="answer_c">
-            <label for="answer_d">{{ choose_exam_quiz.answer_d }}</label><br>
-            <input id='timer' type='hidden' name="timer" value="">
-            <hr>
-        </li>
-        {% endfor %}
-    </ul>
-    <button type="submit">Topshirish</button>
-</form>
+{% extends "base.html" %}
+{% block title %}{{ choose_exam }} || QuizTest {% endblock title %}
 
-<script>
-    
-    console.log('hello world')
-    const timer = document.getElementById('displaytimer')
-    console.log(timer.textContent)
-    const inputtag = document.getElementById('timer')
-    
-    t = 0
-    setInterval(() => {
-        t += 1
-        timer.innerHTML = "<b>Timer: " + t + " seconds</b>"
-        inputtag.value = t
-    }, 1000)
+{% block content %}
+{% load static %}
+
+<h1 id="result"></h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg-8">
+            <h3>{{ choose_exam }}</h3>
+            <h5>{{ choose_exam.science_name }}</h5>
+            <p id="meTime">{{ time }}</p>
+            <div class="border">
+                <form action="" method="post">{% csrf_token %}
+                    {% if not user.is_authenticated %}
+                    <div class="p-3 mb-3">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mehmon!</strong> Quyidagi formani to'ldirishingiz talab qilinadi!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <input type="text" name="temprary_first_name" id="" class="form-control" placeholder="Ism"
+                            required>
+                        <input type="text" name="temprary_last_name" id="" class="form-control mt-2"
+                            placeholder="Familya" required>
+                    </div>
+                    {% endif %}
+
+                    {% for choose_exam_quiz in choose_exam_quizes %}
+
+
+                    <div class="p-3">
+                        <div id="demo   ">
+                            <h5 id="answer_{{ forloop.counter }}"> {{ forloop.counter }}-savol:</br>
+                                {{choose_exam_quiz.question }}</h5>
+                            <ul class="list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            name="{{choose_exam_quiz.question}}" id="answer_a" value="answer_a">
+                                        <label class="form-check-label" for="answer_a" onclick="myFunction()">
+                                            {{ choose_exam_quiz.answer_a }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            name="{{choose_exam_quiz.question}}" id="answer_b" value="answer_b">
+                                        <label class="form-check-label" for="answer_b" onclick="myFunction()">
+                                            {{ choose_exam_quiz.answer_b }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            name="{{choose_exam_quiz.question}}" id="answer_c" value="answer_c">
+                                        <label class="form-check-label" for="answer_c" onclick="myFunction()">
+                                            {{ choose_exam_quiz.answer_c }}
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            name="{{choose_exam_quiz.question}}" id="answer_d" value="answer_d">
+                                        <label class="form-check-label" for="answer_d" onclick="myFunction()">
+                                            {{ choose_exam_quiz.answer_d }}
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                    {% endfor %}
+                    <button class="btn btn-primary" onclick="stopTime()">Yakunlash</button>
+                    <h1 id="timeOutRes"></h1>
+
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-4 mt-5">
+            <div class="border p-4 mt-4">
+                <div class="row g-4 text-dark">
+                    {% for i in total %}
+                    <div class="col-2">
+                        <a href="#answer_{{i}}" class="border test-stayl" id="myDIV">{{ i }}</a>
+                    </div>
+                    {% endfor %}
+
+                </div>
+                <div class="mt-4 position-relative pb-4">
+                    <div class="position-absolute end-0 top-0 fs-4" id="time">
+                        00:00:00
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="">
+    function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = parseInt(minutes / 60) + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            let meTime = document.getElementById("meTime").innerHTML;
+
+            let t = Number(meTime);
+            // t = 3;
+            var fiveMinutes = 60 * t,
+                display = document.querySelector('#time');
+            startTimer(fiveMinutes, display);
+        };
+
+
+
+        function stopTime() {
+            let stopT = document.getElementById("time").innerText;
+            let get_timer = stopT.split(":");
+            let min = get_timer[0];
+            let sec = get_timer[1]
+            let min_int = parseInt(min);
+            let sec_int = parseInt(sec);
+            let timeOut = min_int * 60 + sec_int;
+            console.log(timeOut);
+
+            return timeOut;
+        }
+
+
+        let res = stopTime();
+        document.getElementById("result").innerHTML = res;
+        console.log(res);
 </script>
-
-<!-- 
-    
-    <input type="radio" id="html" name="fav_language" value="HTML">
-    <label for="html">HTML</label><br>
-    <input type="radio" id="css" name="fav_language" value="CSS">
-    <label for="css">CSS</label><br>
-    <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-    <label for="javascript">JavaScript</label> -->
+{% endblock content %}

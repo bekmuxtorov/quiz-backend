@@ -23,7 +23,8 @@ class User(AbstractUser):
     image = models.ImageField(
         verbose_name='Foydalanuvchi rasmi',
         null=True,
-        blank=True
+        blank=True,
+        default='default.jpg'
     )
 
     bio = models.CharField(

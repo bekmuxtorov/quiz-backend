@@ -1,30 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile || {{user.first_name}}</title>
-    <style>
-        .box {
-            display: flex;
-        }
-    </style>
-</head>
+{% block title %}{{ user.get_full_name }} || QuizTest {% endblock title %}
 
-<body>
+{% block content %}
 
-    <div class="box">
-        <div class="box-item">
-            <img src="{{user.image.url}}" alt="Rasm">
-            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-            <p>{{ user.bio }}</p>
+
+
+<div class="container mt-3 pb-5">
+    <div class="mx-auto mb-5">
+        <div class="profile_image w-25 mx-auto">
+            <img src="{{ user.image.url }}" class="img-circle img-fluid" style="border-radius: 50%;">
         </div>
-        <div class="box-item">
-            {% include "home.html" %}
+        <div class="w-100 text-center">
+            <h3 class="mt-2"><strong>{{ user.get_full_name }}</strong></h3>
+            <div class="lead mt-0" style="font-size: large;">
+                {{ user.bio }}
+            </div>
+            <a href="{% url 'edit_profile' pk=user.pk %}" class="btn btn-success mt-2 w-25"><i
+                    class="bi bi-pencil-fill"></i>
+                Tahrirlash</a>
+            <a href="{% url 'add_exam' %}" class="btn btn-success mt-2 w-25"><i class="bi bi-plus"></i>
+                Imtihon qo'shish</a>
         </div>
     </div>
-</body>
+    <div class="row g-4">
+        <div class="col-lg-12 mb-1">
+            <div class="mb-0">
+                <h4 class="card-title">Mening testlarim</h4>
+                <hr class="mb-2 mt-0" size="3">
+                <h6 class="card-subtitle text-muted">Testlar</h6>
+            </div>
+        </div>
+        {% for exam in exams %}
+        <div class="col-lg-4">
+            <div class="card shadow ">
+                <div class="card-header bg-white ">
+                    <h4 class="card-title">{{ exam.name }}</h4>
+                    <hr class="mb-2 mt-0" size="1">
+                    <h6 class="card-subtitle text-muted h5">{{ exam.science_name }}</h6>
+                    <small class="text-muted">
+                        Test
+                    </small>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush ">
+                        <li class="list-group-item px-0">
+                            <div class="d-flex justify-content-between">
+                                <h5>Tuzuvchi</h5>
+                                <div class="lead">{{ exam.author }}</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item px-0">
+                            <div class="d-flex justify-content-between">
+                                <h5>Savollar soni</h5>
+                                <div class="lead">{{ exam.questions_count }}</div>
+                                </h5>
+                        </li>
+                        <li class="list-group-item px-0">
+                            <div class="d-flex justify-content-between">
+                                <h5>Vaqt</h5>
+                                <div class="lead">{{exam.get_all_time}} (daqiqa)</div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="d-grid gap-2 mt-3 mb-3">
+                        <a href="{% url 'exams_items' pk=exam.id %}" class="btn btn-outline-primary " role="button"><i
+                                class="bi bi-arrow-right"></i>
+                            Boshlash</a>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'add_quiz' pk=exam.id %}" class="btn btn-primary d-block  w-50 "
+                                role="button">Test qo'shish</a>
+                            <a href="{% url 'results_list' pk=exam.id %}" class="btn btn-primary d-block  w-50"
+                                role="button">Natijalar</a>
+                        </div>
+                    </div>
 
-</html>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+{% endblock content %}

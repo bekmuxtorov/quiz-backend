@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Tahrirlash || QuizTest {% endblock title %}
+
+{% block content %}
+<div class="container mt-3 pb-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mx-auto shadow rounded-5">
+                <div class="card-header mb-0">
+                    <h4 class="card-title">QuizeApp platformasi</h4>
+                    <hr class="mb-2 mt-0" size="3">
+                    <h6 class="card-subtitle text-muted">Profilni tahrirlash</h6>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="" id="">
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="first_name" class="form-control" id="firstName"
+                                        placeholder="Ism..." value="{{user.first_name}}">
+                                    <label for="firstName">Ism</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="last_name" class="form-control" id="lastName"
+                                        value="{{user.last_name}}" placeholder="Familya...">
+                                    <label for="lastName">Familya</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" name="bio" value="{{user.bio}}"
+                                placeholder="O'zingiz haqingizda yozing..." id="floatingTextarea2"
+                                style="height: 100px"></textarea>
+                            <label for="floatingTextarea2">Bio</label>
+                        </div>
+
+                        <p>Profil rasm</p>
+                        <div class="input-group mb-3">
+                            <input type="file" name="profile_image" class="form-control" id="inputGroupFile04"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Rasm yuklash">
+                        </div>
+                        <div class="form-floating mb-3">
+                            <button class="btn btn-outline-success" type="submit">
+                                <i class="bi bi-pencil-square"></i> Tahrirlash
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

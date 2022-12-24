@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terminal || QuizTest {% endblock title %}
+{% block content %}
+
+<div class="main d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="main__info mt-5 ">
+                    <h1 class="page__info">Biz bilan bilimingizni yanada oshiring</h1>
+                    <h4 class="text-secondary mb-4 mt-3">Qulay va o.</h4>
+                    <a href="{% url 'home' %}" class="btn btn-primary mt-5 py-3 px-5 rounded-pill">Sinovni
+                        boshlash</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-center order-lg-2 hero-img" data-aos="zoom-in"
+                data-aos-delay="150">
+                <img src="{% static 'images/hire-last.jpg' %}" alt="" class="img-fluid main_img animated ">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

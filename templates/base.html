@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/stayl.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;600&display=swap" rel="stylesheet">
+    <title>{% block title %}{% endblock title %}</title>
+    <style>
+        body {
+            font-family: 'Inconsolata', monospace, "Open Sans", sans-serif;
+            color: #444444;
+            font-weight: 500;
+        }
+
+        .nav-img img {
+            width: 100px;
+            height: 60px;
+        }
+
+        .main {
+            width: 100%;
+            height: 91vh;
+        }
+
+        .main_img {
+            width: 600px;
+        }
+
+        .main__info {
+            margin-top: 160px !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Inconsolata', monospace, "Open Sans", sans-serif;
+            font-weight: 600;
+        }
+
+        .page__info {
+            margin: 0;
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 64px;
+            color: #000000;
+        }
+
+        .logo {
+            margin: 0;
+            border-bottom: 3px solid #0d6efd;
+        }
+
+        .box-container {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-section fixed-top" id="header-section">
+        <nav class="navbar navbar-expand-lg navbar-light border-bottom shadow-sm py-2">
+            <div class="container d-flex justufy-content-end">
+                <a class="navbar-brand nav-img d-block" href="{% url 'index' %}">
+                    <!-- <img src="{% static 'images/nav-brend.jpg' %}" alt="logo"> -->
+                    <p class="logo">QuizTest</p>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    {% if user.is_authenticated %}
+
+                    <div class="dropdown ms-auto">
+                        <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.first_name }}
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Chiqish</a></li>
+                        </ul>
+
+                    </div>
+                    {% else %}
+                    <div class="ms-auto">
+                        <a href="{% url 'login' %}" class="btn me-3">Kirish</a>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary py-2 px-4 rounded-pill">Ro'yxatdan
+                            o'tish</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- /navbar section -->
+    <div class="box-container">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+    <!-- /JavaScript -->
+</body>
+
+</html>

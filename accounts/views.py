@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from . import forms
+from . import forms, models
 from django.contrib.auth import authenticate, login, logout
 from quiz.models import Exams
 
@@ -9,19 +9,21 @@ from quiz.models import Exams
 
 def RegisterView(request):
     msg = None
+    success = None
     if request.method == "POST":
         form = forms.SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            msg = 'Muaffaqiyatli ro\'yhatdan o\'tdingiz!'
+            success = 'Muaffaqiyatli ro\'yhatdan o\'tdingiz!'
         else:
-            msg = 'Forma notog\'ri to\'ldirilgan'
+            msg = 'Forma notog\'ri to\'ldirilgan!'
     else:
         form = forms.SignUpForm()
 
     context = {
         'form': form,
-        'msg': msg
+        'msg': msg,
+        'success': success
     }
     return render(request, 'register.html', context)
 
@@ -60,12 +62,29 @@ def HomeView(request):
 
 
 def ProfileView(request):
-    exams = Exams.objects.all()
+    user = request.user
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+    full_name = f"{first_name} {last_name}"
+    exams = Exams.objects.filter(author=full_name)
     context = {
         'exams': exams
     }
     return render(request, 'profile.html', context)
 
 
-def StudentView(request):
-    return render(request, 'student.html')
+def edit_profile_view(request, pk):
+    user = models.User.objects.get(pk=pk)
+    context = {
+        'user': user
+    }
+    if request.method == "POST":
+        
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        bio = request.POST.get('bio')
+        profile_image = request.FILES.get('profile_image')
+        models.User.objects.update_or_create(
+
+        )
+    return render(request, 'profile_edit.html', context)

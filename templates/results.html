@@ -1,10 +1,118 @@
+{% extends "base.html" %}
 {% load static %}
-<div class="card-body">
-    <p class="card-text">Time Taken: {{time}} seconds</p>
-    <p class="card-text">Tog'ri javoblar: {{correct}}</p>
-    <p class="card-text">Xato javoblar: {{wrong}}</p>
-    <p class="card-text">Jami savollar: {{total}}</p>
-    <a href="{% url 'download' path=path_to %}" download>Download file</a>
+{% block title %}Natija || QuizTest {% endblock title %}
 
-    <a href=" {% url 'results_list' pk=choose_exam.id %}">Natijalarni</a>
+
+
+{% block content %}
+
+<!-- result one section -->
+<h1 id="result">id 1</h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mx-auto" style="width: 38rem">
+                <div class="card-header mb-0">
+                    <h4 class="card-title">{{choose_exam}}</h4>
+                    <hr class="mb-2 mt-0" size="3">
+                    <h6 class="card-subtitle text-muted">{{ choose_exam.science_name }}</h6>
+                    <small class="text-muted">
+                        Test natijasi
+                    </small>
+
+                </div>
+                <div class="card-body">
+                    <ul class="list-group-flush mt-0">
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between me-4">
+                                <h5>O'quvchi</h5>
+                                <div class="lead">{{user.get_full_name}}</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between me-4">
+                                <h5>Savollar soni</h5>
+                                <div class="lead">{{total}}</div>
+                                </h5>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between me-4">
+                                <h5>Vaqt</h5>
+                                <div class="lead">{{time_out}}</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between me-4">
+                                <h5>To'g'ri</h5>
+                                <div class="lead">{{correct}}</div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between me-4">
+                                <h5>Noto'g'ri</h5>
+                                <div class="lead">{{ wrong }}</div>
+                            </div>
+                        </li>
+                    </ul>
+                    <form action="" class="float-end">
+                        <p class="m-0 mb-2 text-muted">Natijani yuklab olish uchun ushbu tugmani bosing</p>
+                        <a href="{% url 'download' path=path_to %}" type="button" class="btn btn-primary float-end"><i
+                                class="bi bi-download"></i> Yuklab
+                            olish</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = parseInt(minutes / 60) + ":" + seconds;
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        let meTime = document.getElementById("meTime").innerHTML;
+
+        let t = Number(meTime);
+        // t = 3;
+        var fiveMinutes = 60 * t,
+            display = document.querySelector('#time');
+        startTimer(fiveMinutes, display);
+    };
+
+
+
+    function stopTime() {
+        let stopT = document.getElementById("time").innerText;
+        let get_timer = stopT.split(":");
+        let min = get_timer[0];
+        let sec = get_timer[1]
+        let min_int = parseInt(min);
+        let sec_int = parseInt(sec);
+        let timeOut = min_int * 60 + sec_int;
+        console.log(timeOut);
+
+        return timeOut;
+    }
+
+
+    let res = stopTime();
+    document.getElementById("result").innerHTML = 'Saloooooooooooooom';
+    console.log(res);
+</script>
+<!-- /result one section -->
+{% endblock content %}

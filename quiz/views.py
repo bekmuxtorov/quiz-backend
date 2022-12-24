@@ -1,3 +1,4 @@
+from django.db.models import Q
 import openpyxl
 import os
 from django.http import HttpResponse, Http404
@@ -19,7 +20,7 @@ def ExamsView(request):
 def ExamsDetailView(request, pk):
     choose_exam = models.Exams.objects.get(pk=pk)
     choose_exam_quizes = models.Quiz.objects.filter(exam=pk)
-    count_question = len(list(choose_exam_quizes))
+    user = request.user
     if request.method == "POST":
         questions = models.Quiz.objects.filter(exam=pk).all()
         wrong, correct, total = 0, 0, 0
@@ -94,6 +95,8 @@ def ExamsDetailView(request, pk):
 
         file.save(path)
 
+        w = request.POST.get("get_second")
+        print(">>>", w)
         try:
             Results.objects.create(
                 user=user,
@@ -128,22 +131,37 @@ def ExamsDetailView(request, pk):
             'wrong': wrong,
             'time': time_out,
             'choose_exam': choose_exam,
-            'path_to': path_to
+            'path_to': path_to,
+            'user': user
         }
         return render(request, 'results.html', context)
 
     else:
-        context = {'choose_exam': choose_exam,
-                   'choose_exam_quizes': choose_exam_quizes,
-                   }
+        context = {
+            'total': [i for i in range(1, len(list(choose_exam_quizes))+1)],
+            'choose_exam': choose_exam,
+            'choose_exam_quizes': choose_exam_quizes,
+            'time': choose_exam.get_all_time() * 60
+
+        }
         return render(request, 'exams_items.html', context)
 
 
 def ResultsListView(request, pk):
     choose_exam = models.Exams.objects.get(pk=pk)
-    results_temrary_users = Temporary_user.objects.filter(
-        exam_name=choose_exam,
-    ).order_by('-correct')
+    if request.method == "POST":
+        search_word = request.POST.get('q')
+        if search_word is not None:
+            search_word = str(search_word).strip()
+            result = Q(first_name__contains=search_word) | \
+                Q(last_name__contains=search_word)
+            results_temrary_users = Temporary_user.objects.filter(
+                exam_name=choose_exam).filter(result).order_by('-correct')
+
+    else:
+        results_temrary_users = Temporary_user.objects.filter(
+            exam_name=choose_exam,
+        ).order_by('-correct')
 
     context = {
         'choose_exam': choose_exam,
@@ -165,7 +183,7 @@ def download_page_view(request, path):
 
 
 def add_exam(request):
-    text = 'nimadir'
+    text = ''
     if request.method == "POST":
         first_name = request.user.first_name
         last_name = request.user.last_name
@@ -228,7 +246,7 @@ def add_quiz_view(request, pk):
             sheet = excel_book.worksheets[0]
             print(sheet)
             for row in sheet.rows:
-                if (row[0].value is not None) and (row[1].value is not None) and (row[2].value is not None) and (row[3].value is not None) and (row[4].value is not None) and (row[5].value is not None):
+                if ((row[0].value != "Savollar") and (row[0].value is not None)) and (row[1].value is not None) and (row[2].value is not None) and (row[3].value is not None) and (row[4].value is not None) and (row[5].value is not None):
                     models.Quiz.objects.create(
                         exam=choose_exam,
                         question=row[0].value,
@@ -248,3 +266,9 @@ def add_quiz_view(request, pk):
     }
 
     return render(request, 'add_quiz.html', context)
+
+
+def index_view(request):
+    return render(request, 'index.html')
+
+
