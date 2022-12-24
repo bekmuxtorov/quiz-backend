@@ -7,7 +7,6 @@
 {% block content %}
 
 <!-- result one section -->
-<h1 id="result">id 1</h1>
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
@@ -32,7 +31,7 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between me-4">
                                 <h5>Savollar soni</h5>
-                                <div class="lead">{{total}}</div>
+                                <div class="lead">{{total}} (ta)</div>
                                 </h5>
                         </li>
                         <li class="list-group-item">
@@ -44,22 +43,25 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between me-4">
                                 <h5>To'g'ri</h5>
-                                <div class="lead">{{correct}}</div>
+                                <div class="lead">{{correct}} (ta)</div>
                             </div>
                         </li>
-
+                        <p id="natija_time"></p>
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between me-4">
                                 <h5>Noto'g'ri</h5>
-                                <div class="lead">{{ wrong }}</div>
+                                <div class="lead">{{ wrong }} (ta)</div>
                             </div>
                         </li>
                     </ul>
                     <form action="" class="float-end">
                         <p class="m-0 mb-2 text-muted">Natijani yuklab olish uchun ushbu tugmani bosing</p>
-                        <a href="{% url 'download' path=path_to %}" type="button" class="btn btn-primary float-end"><i
-                                class="bi bi-download"></i> Yuklab
-                            olish</a>
+                        <div class="d-flex justify-content-between ">
+                            <a class="text-align" href="{% url 'home' %}">Testlarga qaytish</a>
+                            <a href="{% url 'download' path=path_to %}" type="button" class="btn btn-primary float-end">
+                                <i class="bi bi-download"></i> Yuklab
+                                olish</a>
+                        </div>
                     </form>
                 </div>
             </div>

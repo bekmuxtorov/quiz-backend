@@ -32,7 +32,6 @@ def ExamsDetailView(request, pk):
         font.size = Pt(14)
         font.color.rgb = RGBColor(51, 0, 0)
 
-        user = request.user
         time_out = request.POST.get('timer')
         # TEMPRARY USER
         temprary_first_name = request.POST.get('temprary_first_name')
@@ -84,7 +83,7 @@ def ExamsDetailView(request, pk):
             f"Vaqt: {request.POST.get('time')}"
         )
 
-        user_first_name = user.first_name
+        user_first_name = request.user.username
         choose_exam_name = choose_exam.name.replace(' ', '_').replace('|', '')
         if temprary_first_name is not None:
             path = f"media/documents/{temprary_first_name}_{choose_exam_name}.docx"
@@ -200,9 +199,10 @@ def add_exam(request):
             questions_count=questions_count
         ).save()
         text = "Muaffaqiyatli imtihon yaratildi!"
+        return redirect('profile')
 
     context = {
-        'text': text
+        'text': text,
     }
     return render(request, 'add_exam.html', context)
 
@@ -230,6 +230,7 @@ def add_quiz_view(request, pk):
                 answer=answer_id
             ).save()
             text = 'Muaffaqiyatli test yaratildi!'
+            return redirect('profile')
 
         elif request.POST.get('add_excel'):
             print(f"{'='*30} + {request.POST.get('add_excel')}")
@@ -257,7 +258,8 @@ def add_quiz_view(request, pk):
                         answer=row[5].value
                     ).save()
                     print('*'*10 + row[5].value)
-            text = 'Muaffiqiyatli majmua qo\'shildi'
+            text = 'Muaffiqiyatli majmua qo\'shildi!'
+            return redirect('profile')
 
     context = {
         'choose_exam': choose_exam,
@@ -270,5 +272,3 @@ def add_quiz_view(request, pk):
 
 def index_view(request):
     return render(request, 'index.html')
-
-
