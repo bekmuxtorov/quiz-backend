@@ -58,6 +58,12 @@ class Temporary_user(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Imtihon nomi'
     )
+    file = models.CharField(
+        max_length=255,
+        verbose_name="Fayl manzili",
+        blank=True,
+        null=True
+    )
 
     correct = models.IntegerField(
         verbose_name="To'g'ri javob",
@@ -87,7 +93,12 @@ class Results(models.Model):
         default=0,
         verbose_name='Foydalanuvchi'
     )
-
+    file = models.CharField(
+        max_length=255,
+        verbose_name="Fayl manzili",
+        blank=True,
+        null=True
+    )
     exam = models.ForeignKey(
         to=Exams,
         on_delete=models.CASCADE,

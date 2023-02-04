@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Imtihon qo'shish || QuizTest {% endblock title %}
+{% block title %}Imtihon Tahrirlash || QuizTest {% endblock title %}
 
 {% block content %}
 
@@ -17,48 +17,47 @@
             <div class="card-header mb-0">
                 <h4 class="card-title">QuizeApp platformasi</h4>
                 <hr class="mb-2 mt-0" size="3">
-                <h6 class="card-subtitle text-muted">Imtihon qo'shish</h6>
+                <h6 class="card-subtitle text-muted">Imtihonni tahrirlash</h6>
             </div>
             <div class="card-body">
                 <form action="" method="post">{% csrf_token %}
-                    <p class="alert alert-success">{{text}}</p>
                     <div class="row g-3">
                         <div class="form-floating mb-3">
                             <input type="text" name="exam_name" class="form-control" id="firstName"
-                                placeholder="Imtihon nomi...">
-                            <label for="firstName" class="ms-2">Imtihon nomi...</label>
+                                value="{{ exam.name }}">
+                            <label for=" firstName" class="ms-2">Imtihon nomi...</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="science_name" class="form-control" id="lastName"
-                                placeholder="Fan nomi...">
+                                value="{{ exam.science_name }}">
                             <label for="lastName" class="ms-2">Fan nomi...</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" name="time_limit" min="0" class="form-control" id="lastName"
-                                placeholder="Har bir test uchun ajratilgan vat...">
+                                value="{{ exam.time_limit }}">
                             <label for="lastName" class="ms-2">Har bir test uchun ajratilgan vat
                                 (min)...</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" name="questions_count" min="0" class="form-control" id="lastName"
-                                placeholder="O'quvchiga chiquvchi testlar soni...">
+                                value="{{ exam.questions_count }}">
                             <label for="lastName" class="ms-2">O'quvchiga chiquvchi testlar soni
                                 (ta)...</label>
                         </div>
 
 
                         <div class="form-floating mb-3">
-                            <select name="status" class="form-control pt-2" id="status">
+                            <select name="status" class="form-control" id="status">
                                 <option value="">Imtihon holati...</option>
-                                <option value="open">Barcha uchun ochiq</option>
+                                <option value="open" selected>Barcha uchun ochiq</option>
                                 <option value="close">Barcha uchun yopiq</option>
                             </select>
-                            <i class="fas fa-angle-down"></i>
+                            <label for="status" class="ms-2">Holati</label>
                         </div>
                     </div>
                     <div class="form-floating mb-3 d-flex justufy-content-center">
                         <button class="btn btn-primary w-50 mx-auto" type="submit">
-                            Jo'natish
+                            Saqlash
                         </button>
                     </div>
                 </form>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 ANSWERS = (
     ('answer_a', 'A javob'),
@@ -10,8 +11,8 @@ ANSWERS = (
 
 class Exams(models.Model):
     author = models.CharField(
-        max_length=120,
-        verbose_name="Muallif"
+        max_length=100,
+        verbose_name="Imtihon egasi"
     )
 
     name = models.CharField(
@@ -37,6 +38,15 @@ class Exams(models.Model):
     questions_count = models.IntegerField(
         default=20,
         verbose_name='O\'quvchiga chiquvchi testlar soni(ta)'
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=(
+            ("open", "Barcha uchun ochiq"),
+            ("close", "Barcha uchun yopiq")
+        ),
+        default="open"
     )
 
     def __str__(self):

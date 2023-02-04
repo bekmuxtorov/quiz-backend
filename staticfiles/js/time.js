@@ -16,7 +16,7 @@ function startTimer(duration, display) {
 }
 
 window.onload = function () {
-    let meTime = document.getElementById("meTime").innerHTML;
+    let meTime = document.getElementById("meTime").innerText;
 
     let t = Number(meTime);
     // t = 3;
@@ -26,21 +26,44 @@ window.onload = function () {
 };
 
 
+let time_result = document.getElementById("time_result").value;
+time_result.innerText.value= 4324;
+console.log('result', time_result);
 
+
+console.log('hey');
 function stopTime() {
     let stopT = document.getElementById("time").innerText;
+    console.log('stopT: ',stopT);
     let get_timer = stopT.split(":");
+    console.log('get_timer >>> '+get_timer)
     let min = get_timer[0];
     let sec = get_timer[1]
     let min_int = parseInt(min);
     let sec_int = parseInt(sec);
-    let timeOut = min_int * 60 + sec_int;
-    console.log(timeOut);
-
+    let timeOut = (min_int * 60) + sec_int;
+    console.log('bu time out', timeOut)
     return timeOut;
 }
-
-
 let res = stopTime();
-document.getElementById("result").innerHTML = res;
-console.log(res);
+
+console.log('salooooooooooooo')
+
+
+let timetest = document.getElementById('timetest');
+timetest.value='jkhkhk';
+timetest.innerHTML.value = 'jinni';
+
+console.log('hey2')
+console.log('this is stop time: ', res)
+console.log('time_result:', time_result)
+time_result.innerHTML = 'salom';
+
+
+
+
+
+function myFunction() {
+    document.getElementById("myDIV").style.backgroundColor = "#5846f9";
+    document.getElementById("myDIV").style.color = "#fff";
+}

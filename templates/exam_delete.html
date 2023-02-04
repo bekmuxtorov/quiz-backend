@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Imtihon o'chirish || QuizTest {% endblock title %}
+
+{% block content %}
+<div class="container align-center">
+    <h3>Rostdan ham "{{ exam.name }}" imtihonini o'chirmoqchimisz!</h3>
+
+    <div class="d-flex justufy-content-center">
+        <p><a href="{% url 'profile' %}">Ortga qaytish</a></p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="Ha">
+        </form>
+    </div>
+</div>
+{% endblock content %}

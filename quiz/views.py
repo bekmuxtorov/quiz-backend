@@ -1,6 +1,9 @@
+from random import sample
+from . import forms
 from django.db.models import Q
 import openpyxl
 import os
+from django.utils import timezone
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -8,21 +11,66 @@ from accounts.models import Results, Temporary_user
 from . import models
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
+
+from datetime import datetime
+
 # Create your views here.
 
 
+def to_minut(nums) -> str:
+    if int(nums) <= 60:
+        return f"{nums} sekund"
+    else:
+        return f"{nums//60} minut {nums%60} sekund"
+
+
 def ExamsView(request):
-    exams = models.Exams.objects.all()
+    exams = models.Exams.objects.filter(status="open")
     context = {'exams': exams}
     return render(request, 'home.html', context)
 
 
+t = None
+
+
 def ExamsDetailView(request, pk):
+    print('#'*10)
+    print(request)
+    print('#'*10)
+    context = {}
     choose_exam = models.Exams.objects.get(pk=pk)
-    choose_exam_quizes = models.Quiz.objects.filter(exam=pk)
+    exam_quizes = list(models.Quiz.objects.filter(exam=pk))
+    choose_exam_quizes = sample(exam_quizes, choose_exam.questions_count)
     user = request.user
-    if request.method == "POST":
-        questions = models.Quiz.objects.filter(exam=pk).all()
+
+    if request.method == "GET":
+        print("GET")
+        now = timezone.now()
+        start_time = datetime.strftime(now, '%Y-%m-%d %H:%M:%S')
+        request.session["start_time"] = start_time
+        context = {
+            'total': [i for i in range(1, len(list(choose_exam_quizes))+1)],
+            'choose_exam': choose_exam,
+            'choose_exam_quizes': choose_exam_quizes,
+            'time': choose_exam.get_all_time() * 60,
+
+        }
+        return render(request, 'exams_items.html', context)
+
+    elif request.method == "POST":
+        end = timezone.now()
+        end_time_str = datetime.strftime(end, '%Y-%m-%d %H:%M:%S')
+        request.session["end_time"] = end_time_str
+        print(request.session.get('end_time'), 'songi vaqt')
+
+        start_time_str = request.session.get("start_time")
+        start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S')
+        end_time = datetime.strptime(end_time_str, '%Y-%m-%d %H:%M:%S')
+        duration = end_time - start_time
+        total_seconds = to_minut(duration.seconds)
+        request.session['total_seconds'] = total_seconds
+
+        questions = choose_exam_quizes
         wrong, correct, total = 0, 0, 0
 
         file = Document()
@@ -32,7 +80,6 @@ def ExamsDetailView(request, pk):
         font.size = Pt(14)
         font.color.rgb = RGBColor(51, 0, 0)
 
-        time_out = request.POST.get('timer')
         # TEMPRARY USER
         temprary_first_name = request.POST.get('temprary_first_name')
         temprary_last_name = request.POST.get('temprary_last_name')
@@ -47,40 +94,39 @@ def ExamsDetailView(request, pk):
 
             file.add_heading(f"{i}. {question.question}", level=1)
             i += 1
-            choices = {'answer_a': ["a) ", var_a], 'answer_b': [
-                "b) ", var_b], 'answer_c': ["c) ", var_c], 'answer_d': ["d) ", var_d]}
+            choices = {
+                'answer_a': ["a) ", var_a],
+                'answer_b': ["b) ", var_b],
+                'answer_c': ["c) ", var_c],
+                'answer_d': ["d) ", var_d]
+            }
             for choice, write in choices.items():
                 if question.answer == choice:
                     para = file.add_paragraph(style="List 2").add_run(
                         f"{write[0]+write[1]}")
                     para.font.color.rgb = RGBColor(0, 255, 0)
 
-                elif request.POST.get(question.question) == choice:
+                elif request.POST.get(question.id) == choice:
                     para = file.add_paragraph(style="List 2").add_run(
                         f"{write[0]+write[1]}")
                     para.font.color.rgb = RGBColor(255, 0, 0)
-
                 else:
                     para = file.add_paragraph(style="List 2").add_run(
                         f"{write[0]+write[1]}")
                     para.font.color.rgb = RGBColor(0, 0, 0)
 
-            print(f'Question: {question.question}')
-            print(f'User answer: {request.POST.get(question.question)}')
-            print(f'Answer: {question.answer}')
-            print(time_out)
-            print('--'*20)
-
-            if question.answer == request.POST.get(question.question):
+            print(f"{question.answer}  {request.POST.get(f'q_{question.id}')}")
+            if question.answer == request.POST.get(f'q_{question.id}'):
                 correct += 1
             else:
                 wrong += 1
+                print(f"q_{question.id}")
 
         file.add_paragraph().add_run(
             f"Tog'ri javoblar: {correct}\n"
             f"Xato javoblar: {wrong}\n"
             f"Jami savollar: {total}\n"
-            f"Vaqt: {request.POST.get('time')}"
+            f"Vaqt: {total_seconds}"
         )
 
         user_first_name = request.user.username
@@ -93,25 +139,26 @@ def ExamsDetailView(request, pk):
             path_to = f"documents\{user_first_name}_{choose_exam_name}.docx"
 
         file.save(path)
-
+        t = request.POST.get('timetest')
         w = request.POST.get("get_second")
-        print(">>>", w)
         try:
             Results.objects.create(
                 user=user,
+                file=path_to,
                 exam=choose_exam,
                 correct=correct,
                 wrong=wrong,
-                time_out=time_out
+                time_out=total_seconds
             )
 
             Temporary_user.objects.create(
                 first_name=user.first_name,
                 last_name=user.last_name,
+                file=path_to,
                 exam_name=choose_exam,
                 correct=correct,
                 wrong=wrong,
-                time_out=time_out
+                time_out=total_seconds
             )
 
         except:
@@ -119,21 +166,22 @@ def ExamsDetailView(request, pk):
                 first_name=temprary_first_name,
                 last_name=temprary_last_name,
                 exam_name=choose_exam,
+                file=path_to,
                 correct=correct,
                 wrong=wrong,
-                time_out=time_out
+                time_out=total_seconds
             )
 
         context = {
             "total": total,
             "correct": correct,
-            'wrong': wrong,
-            'time': time_out,
-            'choose_exam': choose_exam,
-            'path_to': path_to,
-            'user': user
+            "wrong": wrong,
+            "choose_exam": choose_exam,
+            "path_to": path_to,
+            "user": user,
+            "duration": total_seconds,
         }
-        return render(request, 'results.html', context)
+        return redirect('result_exam', pk=pk)
 
     else:
         context = {
@@ -141,14 +189,40 @@ def ExamsDetailView(request, pk):
             'choose_exam': choose_exam,
             'choose_exam_quizes': choose_exam_quizes,
             'time': choose_exam.get_all_time() * 60
-
         }
         return render(request, 'exams_items.html', context)
 
 
+def result_exam(request, pk=None):
+    choose_exam = models.Exams.objects.get(pk=pk)
+    user = request.user
+    try:
+        results = Results.objects.filter(
+            user=user,
+            exam=choose_exam
+        ).order_by('-id')[0]
+    except:
+        results = Temporary_user.objects.all().order_by('-id')[0]
+        print(results)
+        user = f"{results.first_name.title()} {results.last_name.title()}"
+        print(user)
+    context = {
+        "wrong": results.wrong,
+        "correct": results.correct,
+        "duration": results.time_out,
+        "total": results.wrong+results.correct,
+        "path_to": results.file,
+        "user": user
+    }
+
+    return render(request, 'results.html', context)
+
+
 def ResultsListView(request, pk):
     choose_exam = models.Exams.objects.get(pk=pk)
-    if request.method == "POST":
+    if request.method == "GET":
+        return render(request, 'results_list.html')
+    elif request.method == "POST":
         search_word = request.POST.get('q')
         if search_word is not None:
             search_word = str(search_word).strip()
@@ -191,13 +265,15 @@ def add_exam(request):
         science_name = request.POST.get('science_name')
         time_limit = request.POST.get('time_limit')
         questions_count = request.POST.get('questions_count')
-        models.Exams.objects.all().create(
+        status = request.POST.get('status')
+        models.Exams.objects.create(
             author=full_name,
             name=exam_name,
             science_name=science_name,
             time_limit=time_limit,
-            questions_count=questions_count
-        ).save()
+            questions_count=questions_count,
+            status=status
+        )
         text = "Muaffaqiyatli imtihon yaratildi!"
         return redirect('profile')
 
@@ -272,3 +348,26 @@ def add_quiz_view(request, pk):
 
 def index_view(request):
     return render(request, 'index.html')
+
+
+def exam_update(request, pk):
+    exam = models.Exams.objects.get(pk=pk)
+    if request.method == "POST":
+        exam.exam_name = request.POST.get('exam_name')
+        exam.science_name = request.POST.get('science_name')
+        exam.time_limit = request.POST.get('time_limit')
+        exam.questions_count = request.POST.get('questions_count')
+        exam.status = request.POST.get('status')
+        exam.save()
+        return redirect("profile")
+    context = {"exam": exam}
+    return render(request, "exam_update.html", context)
+
+
+def exam_delete(request, pk):
+    exam = models.Exams.objects.get(pk=pk)
+    if request.method == "POST":
+        exam.delete()
+        return redirect("profile")
+    context = {"exam": exam}
+    return render(request, "exam_delete.html", context)

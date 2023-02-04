@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from . import forms, models
 from django.contrib.auth import authenticate, login, logout
-from quiz.models import Exams
+from quiz.models import Exams, Quiz
 
 # Create your views here.
 
@@ -15,6 +15,7 @@ def RegisterView(request):
         if form.is_valid():
             user = form.save()
             success = 'Muaffaqiyatli ro\'yhatdan o\'tdingiz!'
+            return redirect('login')
         else:
             msg = 'Forma notog\'ri to\'ldirilgan!'
     else:
@@ -62,29 +63,32 @@ def HomeView(request):
 
 
 def ProfileView(request):
-    user = request.user
     first_name = request.user.first_name
     last_name = request.user.last_name
     full_name = f"{first_name} {last_name}"
     exams = Exams.objects.filter(author=full_name)
+    for exam in exams:
+        quizs = Quiz.objects.filter(exam=exam)
+        if exam.questions_count >= quizs.count():
+            print(quizs.count())
+            print(exam.questions_count)
+            exam.status = "close"
+            exam.save()
+
     context = {
         'exams': exams
     }
     return render(request, 'profile.html', context)
 
 
-def edit_profile_view(request, pk):
-    user = models.User.objects.get(pk=pk)
-    context = {
-        'user': user
-    }
+def edit_profile_view(request):
+    user = models.User.objects.get(id=request.user.id)
     if request.method == "POST":
-        
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        bio = request.POST.get('bio')
+        user.bio = request.POST.get('bio')
         profile_image = request.FILES.get('profile_image')
-        models.User.objects.update_or_create(
-
-        )
-    return render(request, 'profile_edit.html', context)
+        if profile_image is not None:
+            user.image = profile_image
+            print(profile_image)
+        user.save()
+        return redirect("profile")
+    return render(request, 'profile_edit.html', {"user": user})
